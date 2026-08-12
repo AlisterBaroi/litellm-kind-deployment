@@ -45,7 +45,8 @@ curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deploymen
 
 > To install into a kind cluster you already have, pass its name:
 > ```bash
-> curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/setup.sh | CLUSTER_NAME=my-cluster bash
+> export KIND_CLUSTER_NAME=<my-kind-cluster> #  <-- set kind cluster here
+> curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/setup.sh | CLUSTER_NAME=$KIND_CLUSTER_NAME bash
 > ```
 
 The script runs the same steps described below: it creates a kind cluster named `litellm` (or reuses `CLUSTER_NAME`), applies the Postgres image workaround, and installs the newest stable LiteLLM release. It's non-interactive, safe to re-run, and exits non-zero on failure, which makes it a one-stop local install and a drop-in step for CI/CD pipelines, for example standing up a gateway inside a kind-based integration test job.
