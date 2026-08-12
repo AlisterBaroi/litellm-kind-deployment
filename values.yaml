@@ -1,0 +1,57 @@
+# LiteLLM Helm chart values for a local kind cluster.
+# Chart: oci://ghcr.io/berriai/litellm-helm (tested with chart 0.1.100)
+# Full list of available values:
+#   https://github.com/BerriAI/litellm/tree/main/deploy/charts/litellm-helm
+
+image:
+  repository: ghcr.io/berriai/litellm-database
+  # The tag is set at install time (README step 3 / scripts/setup.sh), which
+  # resolves the newest stable release from GitHub. Put a version here
+  # (e.g. "v1.96.2") if you want a fixed, reproducible install instead.
+  # Left empty, the chart falls back to the "latest" Docker tag.
+  tag: ""
+
+# Rendered as the proxy's config.yaml.
+# Reference: https://docs.litellm.ai/docs/proxy/configs
+proxy_config:
+  model_list:
+    # A mock model, so the proxy works end-to-end with no provider API key.
+    # LiteLLM answers with mock_response instead of calling an upstream
+    # provider, which lets you verify the deployment itself.
+    - model_name: mock-gpt
+      litellm_params:
+        model: openai/mock-gpt
+        api_key: mock-key
+        mock_response: "Hello from LiteLLM on kind! This is a mock response - no API key was used."
+
+    # Real providers: create the litellm-provider-keys Secret first, then
+    # uncomment a block below plus the environmentSecrets section, and run
+    # helm upgrade. See "Step 6 - Add a real provider" in the README.
+    # - model_name: gpt-4o-mini
+    #   litellm_params:
+    #     model: openai/gpt-4o-mini
+    #     api_key: os.environ/OPENAI_API_KEY
+    # - model_name: claude-sonnet
+    #   litellm_params:
+    #     model: anthropic/claude-sonnet-4-5
+    #     api_key: os.environ/ANTHROPIC_API_KEY
+
+  general_settings:
+    master_key: os.environ/PROXY_MASTER_KEY
+    # Persist models added later through the admin UI.
+    store_model_in_db: true
+
+# Exposes every key of these Secrets as env vars in the proxy pod, which the
+# config above references via os.environ/<KEY>. Enable together with a real
+# provider block. Note: the Secret must exist or the pod won't start.
+# environmentSecrets:
+#   - litellm-provider-keys
+
+# The chart deploys a standalone Postgres (used for virtual keys, spend
+# tracking, and the admin UI) via the Bitnami subchart. The subchart's default
+# image tag no longer exists on docker.io/bitnami - Bitnami moved all
+# versioned tags to the read-only "bitnamilegacy" namespace in 2025 - so
+# redirect it there. Without this override the Postgres pod ImagePullBackOffs.
+postgresql:
+  image:
+    repository: bitnamilegacy/postgresql
