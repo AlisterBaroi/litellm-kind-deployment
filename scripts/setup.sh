@@ -100,19 +100,30 @@ kubectl --context "$CTX" wait --for=condition=ready pod \
   -l app.kubernetes.io/name=litellm -n "$NAMESPACE" --timeout=600s
 kubectl --context "$CTX" get pods -n "$NAMESPACE"
 
+echo ""
+echo ">> Fetching the master key, by running:"
+echo "   kubectl --context $CTX get secret litellm-masterkey -n $NAMESPACE -o jsonpath='{.data.masterkey}' | base64 -d"
+MASTER_KEY="$(kubectl --context "$CTX" get secret litellm-masterkey -n "$NAMESPACE" -o jsonpath='{.data.masterkey}' | base64 -d)"
+
 cat <<EOF
 
-LiteLLM is up. Next steps:
+LiteLLM is up.
 
-  # in one terminal:
+  Master key: $MASTER_KEY
+
+Start a port-forward and leave it running:
+
   kubectl --context $CTX port-forward -n $NAMESPACE svc/litellm 4000:4000
 
-  # in another:
-  export LITELLM_MASTER_KEY=\$(kubectl --context $CTX get secret litellm-masterkey -n $NAMESPACE -o jsonpath='{.data.masterkey}' | base64 -d)
+Then open the web UI at http://localhost:4000/ui and log in with:
+
+  username: admin
+  password: the master key above
+
+Or call the API from another terminal:
+
   curl -s http://localhost:4000/v1/chat/completions \\
-    -H "Authorization: Bearer \$LITELLM_MASTER_KEY" \\
+    -H "Authorization: Bearer $MASTER_KEY" \\
     -H "Content-Type: application/json" \\
     -d '{"model": "mock-gpt", "messages": [{"role": "user", "content": "Are you alive?"}]}'
-
-  Admin UI: http://localhost:4000/ui  (user: admin, password: your master key)
 EOF

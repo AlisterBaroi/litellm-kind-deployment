@@ -46,10 +46,13 @@ curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deploymen
 > To install into a kind cluster you already have, pass its name:
 > ```bash
 > export KIND_CLUSTER_NAME=<my-kind-cluster> #  <-- set kind cluster here
+> echo $KIND_CLUSTER_NAME
+> ```
+> ```bash
 > curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/setup.sh | CLUSTER_NAME=$KIND_CLUSTER_NAME bash
 > ```
 
-The script runs the same steps described below: it creates a kind cluster named `litellm` (or reuses `CLUSTER_NAME`), applies the Postgres image workaround, and installs the newest stable LiteLLM release. It's non-interactive, safe to re-run, and exits non-zero on failure, which makes it a one-stop local install and a drop-in step for CI/CD pipelines, for example standing up a gateway inside a kind-based integration test job.
+The script runs the same steps described below: it creates a kind cluster named `litellm` (or reuses `CLUSTER_NAME`), applies the Postgres image workaround, and installs the newest stable LiteLLM release. It finishes by printing your master key and the port-forward command that opens the web UI. It's non-interactive, safe to re-run, and exits non-zero on failure, which makes it a one-stop local install and a drop-in step for CI/CD pipelines, for example standing up a gateway inside a kind-based integration test job.
 
 Piping a stranger's script into bash deserves a healthy pause, so [read it first](scripts/setup.sh), or clone and run it locally:
 
@@ -58,10 +61,10 @@ git clone https://github.com/AlisterBaroi/litellm-kind-deployment.git
 cd litellm-kind-deployment
 ./scripts/setup.sh
 ```
-
+## Manual Setup
 The rest of this README does the same thing by hand, with explanations.
 
-## Step 1: Pick a cluster name and create the cluster
+### Step 1: Pick a cluster name and create the cluster
 
 Later commands refer to the cluster by name, so set it once as an environment variable:
 
@@ -73,7 +76,7 @@ kind create cluster --name "$CLUSTER_NAME"
 
 > Already have a kind cluster? Set `CLUSTER_NAME` to its name, skip the `kind create cluster` line, and make sure kubectl points at it: `kubectl config use-context "kind-$CLUSTER_NAME"`. Everything installs into its own `litellm` namespace, so it coexists fine with other workloads.
 
-## Step 2: Pre-load the Postgres init image
+### Step 2: Pre-load the Postgres init image
 
 The chart's Deployment includes an init container that waits for Postgres before the gateway starts. Its image, `docker.io/bitnami/postgresql:16.1.0-debian-11-r20`, no longer exists: Bitnami moved all versioned tags to the read-only `bitnamilegacy` namespace in 2025. The reference is hardcoded in the chart template, so no Helm value can fix it. What you can do is pull the legacy image inside the kind node and re-tag it under the name the chart expects. The node's pull policy is `IfNotPresent`, so the pre-loaded copy gets used instead of a registry pull that would fail.
 
@@ -90,7 +93,7 @@ done
 
 The main Postgres image has the same Bitnami problem, but that one is overridable. The [values.yaml](values.yaml) in this repo already redirects it to `bitnamilegacy/postgresql`.
 
-## Step 3: Install the chart
+### Step 3: Install the chart
 
 Two things get decided at install time: which LiteLLM version to run, and what the master key is.
 
@@ -145,7 +148,7 @@ kubectl get pods -n litellm
 > litellm-postgresql-0       1/1     Running   0          2m10s
 >```
 
-## Step 4: Talk to your gateway
+### Step 4: Talk to your gateway
 
 Port-forward the service and leave it running in a separate terminal:
 
@@ -201,7 +204,7 @@ resp = client.chat.completions.create(
 print(resp.choices[0].message.content)
 ```
 
-## Step 5: Admin UI and virtual keys
+### Step 5: Admin UI and virtual keys
 
 With the port-forward running, open http://localhost:4000/ui and log in with username `admin` and your master key as the password.
 
@@ -216,7 +219,7 @@ curl -s http://localhost:4000/key/generate \
 
 The response contains a new `sk-...` key that can call `mock-gpt` and nothing else. Use it in the `Authorization` header exactly like the master key.
 
-## Step 6: Add a real provider
+### Step 6: Add a real provider
 
 When you're ready to route to a real LLM:
 
