@@ -130,6 +130,8 @@ helm install litellm oci://ghcr.io/berriai/litellm-helm --version 0.1.100 \
 
 The values file handles the rest. It defines `mock-gpt`, a model that answers with a canned `mock_response` instead of calling any provider, and it redirects the bundled Postgres image to `bitnamilegacy` (see step 2).
 
+> After installing, Helm prints the chart's own NOTES block, which suggests a port-forward to `http://127.0.0.1:8080`. That's generic chart boilerplate, not where anything is deployed; this guide forwards the gateway's real port instead (step 4, port 4000).
+
 You may notice the LiteLLM version floats to the newest release while the chart stays pinned at `--version 0.1.100`. That's deliberate. The app version only decides which LiteLLM binary runs, so newer is fine. The chart version decides the Kubernetes manifests themselves, and step 2's workaround targets an image tag hardcoded inside this exact chart's templates; a newer chart could change or fix that, so the pin only moves after someone re-tests the workarounds against it.
 
 Setting `masterkey` yourself matters more than it looks. If you leave it out, the chart generates a random key, and then generates a fresh one on every `helm upgrade`, which silently breaks every client you've pointed at the gateway.

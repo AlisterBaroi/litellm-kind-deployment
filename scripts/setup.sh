@@ -76,12 +76,21 @@ if [ "$VERSION_RESOLVED" = true ]; then
   IMAGE_TAG_ARGS=(--set image.tag="$LITELLM_VERSION")
 fi
 
+# The chart's NOTES.txt suggests its own port-forward on 8080, which just
+# confuses people next to the instructions this script prints. Helm 3.16+
+# can suppress it; older Helms simply keep the noise.
+NOTES_ARGS=()
+if helm install --help 2>/dev/null | grep -q -- '--hide-notes'; then
+  NOTES_ARGS=(--hide-notes)
+fi
+
 if helm status "$RELEASE" -n "$NAMESPACE" --kube-context "$CTX" >/dev/null 2>&1; then
   echo ">> Release exists - upgrading (master key and DB password are kept)"
   helm upgrade "$RELEASE" "$CHART" --version "$CHART_VERSION" \
     --kube-context "$CTX" -n "$NAMESPACE" \
     --reuse-values -f "$VALUES_FILE" \
-    ${IMAGE_TAG_ARGS[@]+"${IMAGE_TAG_ARGS[@]}"}
+    ${IMAGE_TAG_ARGS[@]+"${IMAGE_TAG_ARGS[@]}"} \
+    ${NOTES_ARGS[@]+"${NOTES_ARGS[@]}"}
 else
   echo ">> Installing chart ${CHART_VERSION}"
   MASTER_KEY="sk-$(openssl rand -hex 16)"
@@ -90,6 +99,7 @@ else
     --kube-context "$CTX" -n "$NAMESPACE" --create-namespace \
     -f "$VALUES_FILE" \
     ${IMAGE_TAG_ARGS[@]+"${IMAGE_TAG_ARGS[@]}"} \
+    ${NOTES_ARGS[@]+"${NOTES_ARGS[@]}"} \
     --set masterkey="$MASTER_KEY" \
     --set postgresql.auth.password="$DB_PASSWORD" \
     --set postgresql.auth."postgres-password"="$DB_PASSWORD"
