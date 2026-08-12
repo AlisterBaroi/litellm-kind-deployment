@@ -261,7 +261,7 @@ curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deploymen
 > # DELETE_CLUSTER=true ./scripts/cleanup.sh
 > ```
 
-The cleanup script respects the same `CLUSTER_NAME` variable as setup. Or do it by hand: `helm uninstall litellm -n litellm && kubectl delete namespace litellm` (deleting the namespace also removes the Postgres PVC), and `kind delete cluster --name "$CLUSTER_NAME"` if you created a cluster just for this.
+The cleanup script respects the same `CLUSTER_NAME` variable as setup. If you don't set it, the script searches your kind clusters for the one that has the LiteLLM release and cleans that one; it stops and asks for `CLUSTER_NAME` if several match. The exception is `DELETE_CLUSTER=true`, which never guesses: it only deletes the cluster you name (default `litellm`). Or do it by hand: `helm uninstall litellm -n litellm && kubectl delete namespace litellm` (deleting the namespace also removes the Postgres PVC), and `kind delete cluster --name "$CLUSTER_NAME"` if you created a cluster just for this.
 
 ## Troubleshooting
 
