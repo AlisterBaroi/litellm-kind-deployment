@@ -248,7 +248,7 @@ Helm uninstall + delete namespace (keeps cluster), using curl:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/cleanup.sh | bash
 
-# or tear down the whole kind cluster
+# or tear down the whole kind cluster (add CLUSTER_NAME=<name> if it isn't "litellm")
 # curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/cleanup.sh | DELETE_CLUSTER=true bash
 ```
 
@@ -257,7 +257,7 @@ curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deploymen
 > # delete deployment and namespace (keep cluster)
 > ./scripts/cleanup.sh 
 > 
-> # or tear down the whole kind cluster
+> # or tear down the whole kind cluster (add CLUSTER_NAME=<name> if it isn't "litellm")
 > # DELETE_CLUSTER=true ./scripts/cleanup.sh
 > ```
 
