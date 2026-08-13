@@ -38,7 +38,7 @@ Last tested: August 2026, on Linux, with chart `litellm-helm 0.1.100` and LiteLL
 
 ## Quickstart
 
-One-shot deploy LiteLLM using curl, no clone needed:
+Deploy LiteLLM in one shot using curl, no clone needed:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/setup.sh | bash
 ```
@@ -61,7 +61,9 @@ git clone https://github.com/AlisterBaroi/litellm-kind-deployment.git
 cd litellm-kind-deployment
 ./scripts/setup.sh
 ```
+
 ## Manual Setup
+
 The rest of this README does the same thing by hand, with explanations.
 
 ### Step 1: Pick a cluster name and create the cluster
@@ -143,12 +145,12 @@ kubectl wait --for=condition=ready pod \
   -l app.kubernetes.io/name=litellm -n litellm --timeout=600s
 kubectl get pods -n litellm
 ```
-> Expected outout:
+> Expected output:
 > ```text
 > NAME                       READY   STATUS    RESTARTS   AGE
 > litellm-5578755f87-zvdxj   1/1     Running   0          2m10s
 > litellm-postgresql-0       1/1     Running   0          2m10s
->```
+> ```
 
 ### Step 4: Talk to your gateway
 
@@ -210,6 +212,8 @@ print(resp.choices[0].message.content)
 
 With the port-forward running, open http://localhost:4000/ui and log in with username `admin` and your master key as the password.
 
+Don't expect to see the master key anywhere inside the UI. The Virtual Keys page lists keys stored in the gateway's database, and the master key isn't one of them: it lives in the `litellm-masterkey` Kubernetes Secret and is read back with the kubectl command from step 4. The list also starts empty on a fresh install, and LiteLLM shows any key's full value exactly once, at creation.
+
 Virtual keys are the reason to run a gateway at all: API keys you mint per user, team, or app, each with its own model allowlist, budget, and rate limits, with spend recorded in Postgres. Create one in the UI, or via the API:
 
 ```bash
@@ -244,7 +248,9 @@ When you're ready to route to a real LLM:
 Then call it exactly like the mock model, just with `"model": "gpt-4o-mini"`.
 
 ## Cleanup
+
 Helm uninstall + delete namespace (keeps cluster), using curl:
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/cleanup.sh | bash
 
@@ -252,7 +258,7 @@ curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deploymen
 # curl -fsSL https://raw.githubusercontent.com/AlisterBaroi/litellm-kind-deployment/main/scripts/cleanup.sh | DELETE_CLUSTER=true bash
 ```
 
-> If running from locally cloned repo: 
+> If running from a locally cloned repo:
 > ```bash
 > # delete deployment and namespace (keep cluster)
 > ./scripts/cleanup.sh 
