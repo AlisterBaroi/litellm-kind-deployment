@@ -21,7 +21,11 @@ jobs:
             Thanks for opening your first issue here!
 
             If this is a "guide step broke" report, including the step, the exact error output, and your versions (`kind version`, `helm version`, `docker version`, plus the chart and LiteLLM versions) usually means it can be fixed without follow-up questions. Upstream churn is the very reason this repo exists, so breakage reports are genuinely welcome.
+
+            And if the guide has been useful to you, a star on this repo helps other people find it.
           pr_message: |
             Thanks for your first pull request here!
 
             A maintainer will take a look soon. If the checks turn anything up, don't worry, that's what they're for. Tip for testing doc changes: `./scripts/setup.sh` gives you a live gateway to verify commands against, and `./scripts/cleanup.sh` removes it.
+
+            And if the guide has been useful to you, a star on this repo helps other people find it.
