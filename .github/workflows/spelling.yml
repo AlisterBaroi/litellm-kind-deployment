@@ -1,0 +1,18 @@
+name: Spelling
+
+# crate-ci/typos: catches misspellings against a dictionary of known typos, so unusual-but-correct words (liveliness, bitnamilegacy) don't false-flag.
+# If it ever flags something intentional, add a _typos.toml exception file.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  typos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: crate-ci/typos@v1.49.0

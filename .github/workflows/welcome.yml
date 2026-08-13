@@ -1,0 +1,27 @@
+name: Welcome
+
+# Greets first-time contributors. Uses pull_request_target so the greeting can be posted on PRs from forks (a plain pull_request token is read-only there). Safe because this job never checks out or runs PR code.
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v3
+        with:
+          issue_message: |
+            Thanks for opening your first issue here!
+
+            If this is a "guide step broke" report, including the step, the exact error output, and your versions (`kind version`, `helm version`, `docker version`, plus the chart and LiteLLM versions) usually means it can be fixed without follow-up questions. Upstream churn is the very reason this repo exists, so breakage reports are genuinely welcome.
+          pr_message: |
+            Thanks for your first pull request here!
+
+            A maintainer will take a look soon. If the checks turn anything up, don't worry, that's what they're for. Tip for testing doc changes: `./scripts/setup.sh` gives you a live gateway to verify commands against, and `./scripts/cleanup.sh` removes it.

@@ -1,0 +1,27 @@
+name: Links
+
+# Checks every URL in the markdown files. Runs on PRs that touch markdown and weekly, because links rot without anyone committing a thing.
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          # --exclude-all-private skips localhost/port-forward URLs, which this README is full of and which only resolve on a user's machine.
+          args: --no-progress --exclude-all-private './**/*.md'
+          fail: true
+        env:
+          # Raises the rate limit for the many github.com links.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
