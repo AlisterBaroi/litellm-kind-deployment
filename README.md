@@ -284,7 +284,9 @@ The cleanup script respects the same `CLUSTER_NAME` variable as setup. If you do
 
 ## Contributing
 
-Found a rough edge, or did an upstream change break a step? Open an issue or a PR. Upstream churn is the reason this repo exists, so a report that "step 2 stopped working" is as useful as code. Ideas on the list: routing to a local [Ollama](https://ollama.com/) backend, ingress instead of port-forward, Prometheus metrics.
+Found a rough edge, or did an upstream change break a step? Open an issue or a PR. Upstream churn is the reason this repo exists, so a report that "step 2 stopped working" is as useful as code. The [issue tracker](https://github.com/AlisterBaroi/litellm-kind-deployment/issues) has a labeled backlog, including several marked `good first issue`.
+
+If this guide saved you an afternoon, a star helps other people find it.
 
 ## License
 
