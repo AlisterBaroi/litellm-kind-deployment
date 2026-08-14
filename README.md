@@ -208,6 +208,52 @@ resp = client.chat.completions.create(
 print(resp.choices[0].message.content)
 ```
 
+<details><summary>JavaScript / Node.js</summary>
+
+```bash
+npm install openai
+```
+
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "http://localhost:4000/v1",
+  apiKey: "<your master key>",
+});
+
+const resp = await client.chat.completions.create({
+  model: "mock-gpt",
+  messages: [{ role: "user", content: "Hello!" }],
+});
+
+console.log(resp.choices[0].message.content);
+```
+
+</details>
+
+<details><summary>LangChain.js</summary>
+
+```bash
+npm install @langchain/openai @langchain/core
+```
+
+```javascript
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage } from "@langchain/core/messages";
+
+const llm = new ChatOpenAI({
+  modelName: "mock-gpt",
+  configuration: { baseURL: "http://localhost:4000/v1" },
+  apiKey: "<your master key>",
+});
+
+const res = await llm.invoke([new HumanMessage("Hello!")]);
+console.log(res.content);
+```
+
+</details>
+
 ### Step 5: Admin UI and virtual keys
 
 With the port-forward running, open http://localhost:4000/ui and log in with username `admin` and your master key as the password.
