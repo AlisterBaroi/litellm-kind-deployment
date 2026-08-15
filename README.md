@@ -182,6 +182,40 @@ curl -s http://localhost:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"model": "mock-gpt", "messages": [{"role": "user", "content": "Are you alive?"}]}'
 ```
+### JavaScript (OpenAI SDK)
+
+```javascript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  baseURL: "http://localhost:4000/v1",
+  apiKey: "mock-key",
+});
+
+const completion = await openai.chat.completions.create({
+  model: "mock-gpt",
+  messages: [{ role: "user", content: "Hello!" }],
+});
+
+console.log(completion.choices.message.content);
+```
+
+### JavaScript (LangChain)
+
+```javascript
+import { ChatOpenAI } from "@langchain/openai";
+
+const model = new ChatOpenAI({
+  configuration: {
+    baseURL: "http://localhost:4000/v1",
+  },
+  apiKey: "mock-key",
+  modelName: "mock-gpt",
+});
+
+const response = await model.invoke("Hello!");
+console.log(response.content);
+```
 
 ```json
 {
