@@ -33,6 +33,7 @@ flowchart LR
 | kind | `kind version` | [docs](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
 | kubectl | `kubectl version --client` | [docs](https://kubernetes.io/docs/tasks/tools/) |
 | Helm 3.8+ | `helm version` | [docs](https://helm.sh/docs/intro/install/) |
+| Node.js | v18+ | Required to run the JavaScript/Langchain examples |
 
 Last tested: August 2026, on Linux, with chart `litellm-helm 0.1.100` and LiteLLM `v1.96.2` on Kubernetes v1.35.
 
@@ -182,40 +183,6 @@ curl -s http://localhost:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"model": "mock-gpt", "messages": [{"role": "user", "content": "Are you alive?"}]}'
 ```
-### JavaScript (OpenAI SDK)
-
-```javascript
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  baseURL: "http://localhost:4000/v1",
-  apiKey: "mock-key",
-});
-
-const completion = await openai.chat.completions.create({
-  model: "mock-gpt",
-  messages: [{ role: "user", content: "Hello!" }],
-});
-
-console.log(completion.choices.message.content);
-```
-
-### JavaScript (LangChain)
-
-```javascript
-import { ChatOpenAI } from "@langchain/openai";
-
-const model = new ChatOpenAI({
-  configuration: {
-    baseURL: "http://localhost:4000/v1",
-  },
-  apiKey: "mock-key",
-  modelName: "mock-gpt",
-});
-
-const response = await model.invoke("Hello!");
-console.log(response.content);
-```
 
 ```json
 {
@@ -241,6 +208,48 @@ resp = client.chat.completions.create(
 )
 print(resp.choices[0].message.content)
 ```
+
+To run the same call using the standard JavaScript OpenAI SDK, first install the package:
+
+bash
+npm install openai
+
+
+javascript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  baseURL: "http://localhost:4000/v1",
+  apiKey: "<your master key>",
+});
+
+const completion = await openai.chat.completions.create({
+  model: "mock-gpt",
+  messages: [{ role: "user", content: "Hello!" }],
+});
+
+console.log(completion.choices[0].message.content);
+
+
+The same call, using the LangChain JavaScript integration client:
+
+bash
+npm install @langchain/openai @langchain/core
+
+
+javascript
+import { ChatOpenAI } from "@langchain/openai";
+
+const model = new ChatOpenAI({
+  configuration: {
+    baseURL: "http://localhost:4000/v1",
+  },
+  apiKey: "<your master key>",
+  model: "mock-gpt",
+});
+
+const response = await model.invoke("Hello!");
+console.log(response.content);
 
 ### Step 5: Admin UI and virtual keys
 
