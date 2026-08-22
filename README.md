@@ -332,6 +332,14 @@ Found a rough edge, or did an upstream change break a step? That report is the m
 
 If this guide saved you an afternoon, a star helps other people find it.
 
+<a href="https://www.star-history.com/#AlisterBaroi/litellm-kind-deployment&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=AlisterBaroi/litellm-kind-deployment&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=AlisterBaroi/litellm-kind-deployment&type=Date" />
+    <img alt="Star history chart for this repository" src="https://api.star-history.com/svg?repos=AlisterBaroi/litellm-kind-deployment&type=Date" />
+  </picture>
+</a>
+
 ## License
 
 [MIT](LICENSE)
