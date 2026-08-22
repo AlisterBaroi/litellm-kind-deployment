@@ -33,7 +33,7 @@ flowchart LR
 | kind | `kind version` | [docs](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
 | kubectl | `kubectl version --client` | [docs](https://kubernetes.io/docs/tasks/tools/) |
 | Helm 3.8+ | `helm version` | [docs](https://helm.sh/docs/intro/install/) |
-| Node.js | v18+ | Required to run the JavaScript/Langchain examples |
+| Node.js 18+ (only for the JavaScript examples) | `node --version` | [docs](https://nodejs.org) |
 
 Last tested: August 2026, on Linux, with chart `litellm-helm 0.1.100` and LiteLLM `v1.96.2` on Kubernetes v1.35.
 
@@ -202,7 +202,7 @@ Since the API is OpenAI-compatible, any OpenAI SDK works as-is:
 ```python
 from openai import OpenAI
 
-client = OpenAI(base_url="http://localhost:4000/v1", api_key="<your master key>")
+client = OpenAI(base_url="http://localhost:4000/v1", api_key="<your-master-key>")
 resp = client.chat.completions.create(
     model="mock-gpt", messages=[{"role": "user", "content": "Hello!"}]
 )
@@ -211,16 +211,16 @@ print(resp.choices[0].message.content)
 
 To run the same call using the standard JavaScript OpenAI SDK, first install the package:
 
-bash
+```bash
 npm install openai
+```
 
-
-javascript
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
   baseURL: "http://localhost:4000/v1",
-  apiKey: "<your master key>",
+  apiKey: "<your-master-key>",
 });
 
 const completion = await openai.chat.completions.create({
@@ -229,27 +229,28 @@ const completion = await openai.chat.completions.create({
 });
 
 console.log(completion.choices[0].message.content);
-
+```
 
 The same call, using the LangChain JavaScript integration client:
 
-bash
+```bash
 npm install @langchain/openai @langchain/core
+```
 
-
-javascript
+```javascript
 import { ChatOpenAI } from "@langchain/openai";
 
 const model = new ChatOpenAI({
   configuration: {
     baseURL: "http://localhost:4000/v1",
   },
-  apiKey: "<your master key>",
+  apiKey: "<your-master-key>",
   model: "mock-gpt",
 });
 
 const response = await model.invoke("Hello!");
 console.log(response.content);
+```
 
 ### Step 5: Admin UI and virtual keys
 
