@@ -330,6 +330,8 @@ The cleanup script respects the same `CLUSTER_NAME` variable as setup. If you do
 
 Found a rough edge, or did an upstream change break a step? That report is the most useful contribution this repo can get, and [CONTRIBUTING.md](CONTRIBUTING.md) explains what to include. The [issue tracker](https://github.com/AlisterBaroi/litellm-kind-deployment/issues) has a labeled backlog, including several marked `good first issue`.
 
+[![Contributors](https://contrib.rocks/image?repo=AlisterBaroi/litellm-kind-deployment)](https://github.com/AlisterBaroi/litellm-kind-deployment/graphs/contributors)
+
 If this guide saved you an afternoon, a star helps other people find it.
 
 ## License
