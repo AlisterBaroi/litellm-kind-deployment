@@ -333,23 +333,19 @@ The cleanup script respects the same `CLUSTER_NAME` variable as setup. If you do
 
 ## FAQ
 
-**Does my data leave my machine?**
-
+1. **Does my data leave my machine?**  \
 With the mock model, no. The gateway answers with a canned string and never calls out. Once you add a real provider (step 6), your prompts go to that provider, the same as calling it directly.
 
-**Is this production-ready?**
-
+2. **Is this production-ready?**  \
 No. This is a local development and evaluation setup: one replica, port-forward access, a single-node Postgres inside a kind cluster. For a real deployment, start from LiteLLM's [production guide](https://docs.litellm.ai/docs/proxy/prod).
 
-**How do I rotate the master key?**
-
-```bash
-helm upgrade litellm oci://ghcr.io/berriai/litellm-helm --version 0.1.100 \
-  --namespace litellm --reuse-values \
-  --set masterkey="sk-$(openssl rand -hex 16)"
-```
-
-Read the new key back from the Secret as in step 4. Every client still sending the old key gets a 401 from that moment on. Virtual keys keep working, since the gateway stores them hashed in Postgres. Provider credentials saved through the UI are encrypted with the master key (this install sets no separate salt key), so rotate before adding those, not after.
+3. **How do I rotate the master key?**
+    ```bash
+    helm upgrade litellm oci://ghcr.io/berriai/litellm-helm --version 0.1.100 \
+      --namespace litellm --reuse-values \
+      --set masterkey="sk-$(openssl rand -hex 16)"
+    ```
+    Read the new key back from the Secret as in step 4. Every client still sending the old key gets a 401 from that moment on. Virtual keys keep working, since the gateway stores them hashed in Postgres. Provider credentials saved through the UI are encrypted with the master key (this install sets no separate salt key), so rotate before adding those, not after.
 
 ## Contributing
 
