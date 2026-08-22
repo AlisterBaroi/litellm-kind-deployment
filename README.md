@@ -202,7 +202,7 @@ Since the API is OpenAI-compatible, any OpenAI SDK works as-is:
 ```python
 from openai import OpenAI
 
-client = OpenAI(base_url="http://localhost:4000/v1", api_key="<your master key>")
+client = OpenAI(base_url="http://localhost:4000/v1", api_key="<your-master-key>")
 resp = client.chat.completions.create(
     model="mock-gpt", messages=[{"role": "user", "content": "Hello!"}]
 )
@@ -220,7 +220,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
   baseURL: "http://localhost:4000/v1",
-  apiKey: "<your master key>",
+  apiKey: "<your-master-key>",
 });
 
 const completion = await openai.chat.completions.create({
@@ -244,7 +244,7 @@ const model = new ChatOpenAI({
   configuration: {
     baseURL: "http://localhost:4000/v1",
   },
-  apiKey: "<your master key>",
+  apiKey: "<your-master-key>",
   model: "mock-gpt",
 });
 
