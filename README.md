@@ -2,7 +2,7 @@
 
 [![Spelling](https://github.com/AlisterBaroi/litellm-kind-deployment/actions/workflows/spelling.yml/badge.svg)](https://github.com/AlisterBaroi/litellm-kind-deployment/actions/workflows/spelling.yml)
 [![License](https://img.shields.io/github/license/AlisterBaroi/litellm-kind-deployment)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/AlisterBaroi/litellm-kind-deployment)](https://github.com/AlisterBaroi/litellm-kind-deployment/stargazers)
+[![Stars](https://img.shields.io/github/stars/AlisterBaroi/litellm-kind-deployment)](https://www.star-history.com/#AlisterBaroi/litellm-kind-deployment&Date)
 [![Last commit](https://img.shields.io/github/last-commit/AlisterBaroi/litellm-kind-deployment)](https://github.com/AlisterBaroi/litellm-kind-deployment/commits/main)
 
 Run the [LiteLLM AI Gateway](https://docs.litellm.ai/docs/simple_proxy) on a local [kind](https://kind.sigs.k8s.io/) (Kubernetes-in-Docker) cluster. You don't need a cloud account or an LLM API key: the install ships with a mock model, so you can verify the whole stack end to end and only add real provider keys when you actually want them.
